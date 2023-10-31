@@ -1,0 +1,53 @@
+name: performing cd
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+         inputs:
+             custombranch:
+                 description: 'enter the branch'
+                 required: true
+                 default: 'main'
+env:
+    RESOURCE_GROUP: "iciciprojectdemo"
+    CLUSTER_NAME:   "Ipru-Activex"
+jobs:
+    deployjob:
+      permissions:
+        contents: read
+        id-token: write
+      runs-on: ubuntu-latest
+      steps:
+          - name: checkout the code
+            uses: actions/checkout@v3
+            #azure login
+          - name: Azure login 
+            uses: azure/login@v1.4.6
+            with:
+                client_id: ${{ secrets.AZURE_CLIENT_ID }}
+                tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+                subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+          -  name: Set up kubelogin for non-interactive login
+             uses: azure/use-kubelogin@v1
+             with:
+                kubelogin-version: 'v0.0.25'      
+        
+          # Retrieves your Azure Kubernetes Service cluster's kubeconfig file
+          - name: Get K8s context
+            uses: azure/aks-set-context@v3
+            with:
+              resource-group: ${{ env.RESOURCE_GROUP }}
+              cluster-name: ${{ env.CLUSTER_NAME }}
+              admin: 'false'
+              use-kubelogin: 'true'
+          
+          - name: Helm deployment
+            uses: azure/k8s-bake@v2
+            with:
+              renderEngine: "helm"
+              helmChart: https://github.com/vardhanreddy-1/helm-repo
+              helm-version: "latest"
+            id: bake
