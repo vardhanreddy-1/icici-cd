@@ -1,4 +1,4 @@
-name: performing cd
+name: performing cd-icici
 
 on:
   push:
