@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "iccd.labels" . | nindent 4 }}
 spec:
-  progressDeadLineSeconds: {{ .Values.progressDeadLineSeconds}}
+  progressDeadLineSeconds: 3600 #{{ .Values.progressDeadLineSeconds}}
   {{- if .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
