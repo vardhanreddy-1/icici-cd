@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "Ipru.fullname" . }}
+  name: {{ include "iccd.fullname" . }}
   labels:
-    {{- include "Ipru.labels" . | nindent 4 }}
+    {{- include "iccd.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "Ipru.fullname" . }}
+    name: {{ include "iccd.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:
