@@ -72,5 +72,5 @@ jobs:
               manifests: ${{ steps.bake.outputs.manifestsBundle }}
               images: |
                 ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.USER_NAME }}:${{ env.VERSION }}
-              #imagepullsecrets: |
-              # {{ env.PROJECT_NAME }}
+              imagepullsecrets: |
+                    ${{ env.PROJECT_NAME }}
