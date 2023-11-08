@@ -6,9 +6,9 @@ metadata:
     {{- include "iccd.labels" . | nindent 4 }}
 spec:
   progressDeadlineSeconds: {{ .Values.progressDeadlineSeconds}}
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount  }}
-  {{- end }}
+  #{{- if not .Values.autoscaling.enabled }}
+  replicas:   2  #{{ .Values.replicaCount  }}
+  #{{- end }}
   selector:
     matchLabels:
       {{- include "iccd.selectorLabels" . | nindent 6 }}
