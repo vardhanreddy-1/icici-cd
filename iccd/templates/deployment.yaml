@@ -12,6 +12,11 @@ spec:
   selector:
     matchLabels:
       {{- include "iccd.selectorLabels" . | nindent 6 }}
+  startegy:
+      type: RollingUpdate
+      rollingupdate:
+          maxSurge: 25%
+          maxUnavailable: 25% 
   template:
     metadata:
       {{- with .Values.podAnnotations }}
