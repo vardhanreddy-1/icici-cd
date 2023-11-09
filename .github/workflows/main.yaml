@@ -6,8 +6,8 @@ on:
       - main
 
   workflow_dispatch:
-         inputs:
-             custombranch:
+    inputs:
+          custombranch:
                  description: 'enter the branch'
                  required: true
                  default: 'main'
@@ -71,6 +71,6 @@ jobs:
             with:
               manifests: ${{ steps.bake.outputs.manifestsBundle }}
               images: |
-                ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.USER_NAME }}:${{ env.VERSION }}
+                      icicicd.azurecr.io/icicicd/nodejsproject
               imagepullsecrets: |
                     ${{ env.PROJECT_NAME }}
