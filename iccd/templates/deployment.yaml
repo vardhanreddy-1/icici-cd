@@ -5,18 +5,13 @@ metadata:
   labels:
     {{- include "iccd.labels" . | nindent 4 }}
 spec:
-  progressDeadlineSeconds: {{ .Values.progressDeadlineSeconds}}
-  #{{- if not .Values.autoscaling.enabled }}
-  replicas: 2  #{{ .Values.replicaCount  }}
-  #{{- end }}
+  progressDeadlineSeconds: {{ .Values.progressDeadlineSeconds }}
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "iccd.selectorLabels" . | nindent 6 }}
-  #startegy:
-  #    type: RollingUpdate
-  #    rollingupdate:
-  #        maxSurge: 25%
-  #        maxUnavailable: 25% 
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -25,12 +20,12 @@ spec:
       {{- end }}
       labels:
         {{- include "iccd.labels" . | nindent 8 }}
-	{{- with .Values.podLabels }}
+	        {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
+      imagePullSecrets: 
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "iccd.serviceAccountName" . }}
@@ -40,20 +35,20 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image:  {{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          #livenessProbe:
-          #  httpGet:
-          #    path: /
-          #    port: http
-          #readinessProbe:
-          #  httpGet:
-          #    path: /
-          #    port: http
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}
